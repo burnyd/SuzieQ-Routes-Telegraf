@@ -1,0 +1,22 @@
+sources:
+- name: eosdevs
+  hosts:
+    - url: https://172.20.20.100 devtype=eos username=admin password=admin
+    - url: https://172.20.20.101 devtype=eos username=admin password=admin
+
+devices:
+- name: eos
+  transport: https
+  devtype: eos
+
+auths:
+- name: eos
+  username: admin
+  password: admin
+
+namespaces:
+- name: eos
+  source: eosdevs
+  auth: eos
+  device: eos
+

@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: Flux
+    type: "influxdb"
+    access: "proxy"
+    url: "http://172.20.20.104:8086"
+    editable: true
+    secureJsonData:
+      token: "sqtoken"
+    jsonData:
+      version: Flux
+      organization: "sq"
+      defaultBucket: sq
+      tlsSkipVerify: true

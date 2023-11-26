@@ -1,0 +1,63 @@
+name: sq
+
+topology:
+  nodes:
+    ceos1:
+      kind: ceos
+      image: gcr.io/act-sandbox/ceoslab:4.29.2F
+      mgmt_ipv4: 172.20.20.100
+      ports:
+      - 4001:6030
+      - 4444:4432
+      - 888:80
+      - 6040:6040
+      startup-config: configs/ceos1.conf
+
+    ceos2:
+      kind: ceos
+      image: gcr.io/act-sandbox/ceoslab:4.29.2F
+      mgmt_ipv4: 172.20.20.101
+      ports:
+      - 4002:6030
+      - 4445:443
+      - 889:80
+      - 6041:6040
+      startup-config: configs/ceos2.conf
+
+    sq:
+      kind: linux
+      image: netenglabs/suzieq
+      mgmt_ipv4: 172.20.20.102
+      binds:
+        - inventory.yaml:/tmp/inventory.yaml
+
+    grafana:
+      kind: linux
+      image: grafana/grafana:7.4.3
+      mgmt_ipv4: 172.20.20.103
+      ports:
+      - 3001:3000
+      publish:
+        - http/3001
+      binds:
+        - influx.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+
+    influx:
+      kind: linux
+      image: influxdb:2.0
+      mgmt_ipv4: 172.20.20.104
+      ports:
+      - 8086:8086
+      publish:
+        - http/8086
+      env:
+        DOCKER_INFLUXDB_INIT_MODE: setup
+        DOCKER_INFLUXDB_INIT_BUCKET: sq
+        DOCKER_INFLUXDB_INIT_ORG: sq
+        DOCKER_INFLUXDB_INIT_USERNAME: sqadmin
+        DOCKER_INFLUXDB_INIT_PASSWORD: sqpassword
+        DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: sqtoken
+  links:
+    - endpoints: ["ceos1:eth1", "ceos2:eth1"]
+    - endpoints: ["ceos1:eth2", "ceos2:eth2"]
+    - endpoints: ["ceos1:eth3", "ceos2:eth3"]
