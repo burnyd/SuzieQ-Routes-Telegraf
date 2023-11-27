@@ -4,7 +4,7 @@ topology:
   nodes:
     ceos1:
       kind: ceos
-      image: ceoslab:4.29.2F
+      image: gcr.io/act-sandbox/ceoslab:4.29.2F
       mgmt_ipv4: 172.20.20.100
       ports:
       - 4001:6030
@@ -15,7 +15,7 @@ topology:
 
     ceos2:
       kind: ceos
-      image: ceoslab:4.29.2F
+      image: gcr.io/act-sandbox/ceoslab:4.29.2F
       mgmt_ipv4: 172.20.20.101
       ports:
       - 4002:6030
@@ -36,9 +36,9 @@ topology:
       image: grafana/grafana:7.4.3
       mgmt_ipv4: 172.20.20.103
       ports:
-      - 3000:3000
+      - 3001:3000
       publish:
-        - http/3000
+        - http/3001
       binds:
         - influx.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
 
